@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marcos — Transformación Física 1 a 1</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0e0e0e;
+      --white: #f7f6f2;
+      --green: #1D9E75;
+      --green-dark: #0f6e56;
+      --green-light: #e8f5ee;
+      --gray: #555;
+      --gray-light: #999;
+      --border: #e0ddd5;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      z-index: 100;
+    }
+    .nav-logo {
+      font-size: 17px; font-weight: 800; letter-spacing: -0.3px; color: var(--black);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--green); }
+    .nav-cta {
+      background: var(--black); color: var(--white);
+      border: none; border-radius: 8px;
+      padding: 8px 18px; font-size: 13px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 120px 24px 80px;
+      max-width: 640px; margin: 0 auto;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--green-light); color: var(--green-dark);
+      border: 1px solid #9fe1cb; border-radius: 20px;
+      padding: 5px 16px; margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 7vw, 52px);
+      font-weight: 800; line-height: 1.1; letter-spacing: -1.5px;
+      color: var(--black); margin-bottom: 10px;
+    }
+    .hero h1 em {
+      font-style: normal; color: var(--green);
+    }
+    .hero-sub {
+      font-size: clamp(15px, 3vw, 18px);
+      color: var(--gray); margin-bottom: 36px; line-height: 1.55;
+      max-width: 480px; margin-left: auto; margin-right: auto;
+    }
+    .hero-sub strong { color: var(--black); }
+    .btn-primary {
+      display: inline-block;
+      background: var(--black); color: var(--white);
+      border: none; border-radius: 12px;
+      padding: 16px 32px; font-size: 16px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      margin-bottom: 14px;
+    }
+    .btn-primary:active { opacity: 0.85; }
+    .btn-secondary {
+      display: inline-block;
+      background: transparent; color: var(--black);
+      border: 1.5px solid var(--border); border-radius: 12px;
+      padding: 15px 32px; font-size: 16px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      margin-left: 10px;
+    }
+    .hero-note { font-size: 12px; color: var(--gray-light); margin-top: 14px; }
+
+    /* DIVIDER */
+    .divider {
+      border: none; border-top: 1px solid var(--border);
+      max-width: 640px; margin: 0 auto;
+    }
+
+    /* PARA QUIEN */
+    .section { padding: 72px 24px; max-width: 640px; margin: 0 auto; }
+    .section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--green-dark); margin-bottom: 12px;
+    }
+    .section h2 {
+      font-size: clamp(24px, 5vw, 36px); font-weight: 800;
+      letter-spacing: -0.8px; line-height: 1.15; margin-bottom: 20px;
+    }
+    .section p { font-size: 16px; color: var(--gray); line-height: 1.65; margin-bottom: 16px; }
+
+    .checks { margin-top: 24px; }
+    .check {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+    }
+    .check:last-child { border-bottom: none; }
+    .check-icon {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--green-light); border: 1px solid #9fe1cb;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .check-icon svg { width: 11px; height: 11px; }
+    .check-text { font-size: 15px; color: var(--black); line-height: 1.5; }
+    .check-text strong { font-weight: 700; }
+
+    /* QUOTE */
+    .quote-section {
+      background: var(--black); color: var(--white);
+      padding: 72px 24px; text-align: center;
+    }
+    .quote-inner { max-width: 580px; margin: 0 auto; }
+    .quote-mark { font-size: 64px; line-height: 0.5; color: var(--green); font-weight: 800; margin-bottom: 24px; display: block; }
+    .quote-text {
+      font-size: clamp(20px, 4.5vw, 30px); font-weight: 700;
+      letter-spacing: -0.5px; line-height: 1.25; margin-bottom: 20px;
+    }
+    .quote-text em { font-style: normal; color: var(--green); }
+    .quote-author { font-size: 14px; color: #888; }
+
+    /* COMO FUNCIONA */
+    .steps { margin-top: 32px; }
+    .step {
+      display: flex; gap: 20px; align-items: flex-start;
+      margin-bottom: 28px;
+    }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--black); color: var(--white);
+      font-size: 14px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-content h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .step-content p { font-size: 14px; color: var(--gray); line-height: 1.5; }
+
+    /* CALCULADORA CTA */
+    .calc-cta {
+      background: var(--green-light);
+      border: 1px solid #9fe1cb;
+      border-radius: 20px;
+      padding: 40px 28px;
+      text-align: center;
+      margin: 0 24px 72px;
+      max-width: 592px;
+      margin-left: auto; margin-right: auto;
+    }
+    .calc-cta h2 {
+      font-size: clamp(20px, 4vw, 28px); font-weight: 800;
+      letter-spacing: -0.5px; margin-bottom: 10px; color: var(--black);
+    }
+    .calc-cta p { font-size: 15px; color: var(--gray); margin-bottom: 24px; line-height: 1.5; }
+    .btn-green {
+      display: inline-block;
+      background: var(--green); color: #fff;
+      border: none; border-radius: 12px;
+      padding: 16px 32px; font-size: 16px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-green:active { opacity: 0.85; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+      text-align: center;
+      font-size: 13px; color: var(--gray-light);
+    }
+    footer strong { color: var(--black); }
+
+    /* RESPONSIVE */
+    @media (max-width: 480px) {
+      .btn-secondary { margin-left: 0; margin-top: 10px; display: block; text-align: center; }
+      .hero { padding: 96px 20px 64px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">Marcos<span>.</span></a>
+    <a class="nav-cta" href="https://mjrasesoriass-dotcom.github.io/calculadora-masa/">Calcular mis calor&#237;as</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">Asesor&#237;a 1 a 1 &#183; Plazas limitadas</div>
+    <h1>El m&#233;todo que usan<br>los hombres delgados<br>para ganar masa<br><em>de verdad.</em></h1>
+    <p class="hero-sub">Para hombres delgados que llevan a&#241;os entrenando y comiendo bien, <strong>pero que siguen sin ver resultados.</strong></p>
+    <div>
+      <a class="btn-primary" href="#como-funciona">Ver c&#243;mo funciona</a>
+      <a class="btn-secondary" href="https://mjrasesoriass-dotcom.github.io/calculadora-masa/">Calcular mis calor&#237;as</a>
+    </div>
+    <p class="hero-note">Gratis &#183; Sin compromiso &#183; En menos de 2 minutos</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- PARA QUIEN -->
+  <section class="section">
+    <div class="section-label">&#191;Esto es para ti?</div>
+    <h2>Reconoces alguna de estas situaciones</h2>
+    <p>Si llevas meses o a&#241;os intentando ganar masa muscular y nada funciona, el problema no eres t&#250;. Es que nadie te ha dado un plan hecho espec&#237;ficamente para tu cuerpo.</p>
+    <div class="checks">
+      <div class="check">
+        <div class="check-icon">
+          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 6l3 3 5-5" stroke="#0f6e56" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="check-text"><strong>Comes mucho pero no subes de peso.</strong> Tienes la sensaci&#243;n de que tu cuerpo quema todo lo que comes.</span>
+      </div>
+      <div class="check">
+        <div class="check-icon">
+          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 6l3 3 5-5" stroke="#0f6e56" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="check-text"><strong>Entrenas con constancia pero tu cuerpo no cambia.</strong> La b&#225;scula no se mueve y el espejo tampoco.</span>
+      </div>
+      <div class="check">
+        <div class="check-icon">
+          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 6l3 3 5-5" stroke="#0f6e56" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="check-text"><strong>Ya has probado de todo.</strong> Suplementos, rutinas de internet, dietas gen&#233;ricas. Nada ha funcionado de forma sostenida.</span>
+      </div>
+      <div class="check">
+        <div class="check-icon">
+          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 6l3 3 5-5" stroke="#0f6e56" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="check-text"><strong>Quieres verte fuerte y sentirte seguro.</strong> No buscas ser fisioculturista. Quieres un f&#237;sico s&#243;lido que se note en el d&#237;a a d&#237;a.</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- QUOTE -->
+  <div class="quote-section">
+    <div class="quote-inner">
+      <span class="quote-mark">&#8220;</span>
+      <p class="quote-text">El problema no es tu cuerpo.<br>Es que nadie te ha dado<br>un plan hecho <em>para ti.</em></p>
+      <p class="quote-author">&#8212; Marcos, asesor de transformaci&#243;n f&#237;sica</p>
+    </div>
+  </div>
+
+  <!-- COMO FUNCIONA -->
+  <section class="section" id="como-funciona">
+    <div class="section-label">El proceso</div>
+    <h2>C&#243;mo funciona la asesor&#237;a 1 a 1</h2>
+    <p>Un plan completamente personalizado para tu cuerpo, tu estilo de vida y tus objetivos. Sin plantillas gen&#233;ricas.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Calculamos tu punto de partida real</h3>
+          <p>Analizamos tus calor&#237;as, macros y nivel de actividad para saber exactamente por qu&#233; no est&#225;s subiendo y qu&#233; necesita tu cuerpo.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Dise&#241;amos tu plan a medida</h3>
+          <p>Nutrici&#243;n y entrenamiento pensados espec&#237;ficamente para hombres con metabolismo r&#225;pido. Sin restricciones absurdas. Sin rutinas gen&#233;ricas.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Seguimiento continuo contigo</h3>
+          <p>No desaparezco despu&#233;s de mandarte el plan. Ajustamos semana a semana seg&#250;n c&#243;mo responde tu cuerpo.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>Ves resultados reales</h3>
+          <p>Masa muscular visible, m&#225;s energ&#237;a y una confianza que se nota. No en a&#241;os. En semanas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALCULADORA CTA -->
+  <div class="calc-cta">
+    <h2>Empieza aqu&#237;: calcula tus calor&#237;as exactas</h2>
+    <p>Descubre en 2 minutos cu&#225;ntas calor&#237;as necesitas para empezar a ganar masa muscular de verdad. Gratis, sin compromiso.</p>
+    <a class="btn-green" href="https://mjrasesoriass-dotcom.github.io/calculadora-masa/">Ir a la calculadora</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <strong>Marcos</strong> &#183; Asesor&#237;a de transformaci&#243;n f&#237;sica 1 a 1<br>
+    <span style="margin-top:6px; display:block;">Plazas limitadas &#183; Solo para hombres que van en serio</span>
+  </footer>
+
+</body>
+</html>
